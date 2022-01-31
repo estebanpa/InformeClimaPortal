@@ -1,0 +1,75 @@
+﻿@model IEnumerable<InformeClimaPortal.Entities.Ciudad>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<h1>Listado</h1>
+
+ <div class="row">
+     <form asp-controller="Ciudades" asp-action="Search" id="SearchForm"
+       
+        data-ajax-method="POST">
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <input name="name" input-sm" placeholder="Nombre" />
+            </div>
+         </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="submit" value="Buscar" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+
+
+</div>
+
+<div id="Results"></div>
+
+<div id="progress" class="modal">
+    <div class="center">
+        <img src="~/images/loader.gif" />
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExternalId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pais.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExternalId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pais.Name)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.CiudadId">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.CiudadId">Borrar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

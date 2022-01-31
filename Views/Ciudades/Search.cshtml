@@ -1,0 +1,49 @@
+﻿@model InformeClimaPortal.Entities.Ciudad
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@if (Model == null)
+{
+    <h4>Ciudad no encontrada</h4>
+    <hr />
+}
+else
+{
+    <h4>Ciudad</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Agregar">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="CiudadId" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" readonly/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ExternalId" class="control-label"></label>
+                    <input asp-for="ExternalId" class="form-control" readonly/>
+                    <span asp-validation-for="ExternalId" class="text-danger"></span>
+                </div>
+                <input asp-for="Pais.Name" class="form-control" hidden/>
+                <input asp-for="Pais.ExternalId" class="form-control" hidden/>
+                <div class="form-group">
+                    <input type="submit" value="Agregar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,178 @@
+﻿@using InformeClimaPortal.Entities
+@model IEnumerable<InformeClimaPortal.Entities.Informe>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Informe del clima</h1>
+
+ <div class="row">
+     <form asp-controller="Informes" asp-action="Registrar" id="SearchForm"
+        data-ajax-method="POST">
+        <div class="row">
+            <div class="col-md-3">
+               @Html.DropDownList("externalId", ViewBag.Ciudades, String.Empty, new { @class = "form-control" })
+
+             </div>
+
+             <div class="col-md-3">
+                <div class="form-group">
+                    <label>
+                        @Html.CheckBox("historico")
+                        Incluir histórico</label>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="submit" value="Consultar" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            
+        </div>
+    </form>
+
+</div>
+
+@{
+    var ultima = Model.FirstOrDefault();
+    var listado = new List<Informe>();
+
+
+    if (ultima != null)
+    {
+        var clima = $"{ultima.Clima} - Sensación Térmica: {ultima.SensacionTermica}";
+
+        <br />
+        <div class="row">
+            <dd class = "col-sm-10">
+            <span>Ciudad: </span> @ultima.Ciudad.Name
+        </dd>
+        </div>
+            <div class="row">
+            <dd class = "col-sm-10">
+                <span>Clima: </span> @clima
+            </dd>
+        </div>
+
+        listado = Model.Where(x => x.InformeId != ultima.InformeId).ToList();
+    }
+}
+    <br />
+    
+    <div class="table-responsive">
+	<table class="table table-bordered table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>
+					<span>Fecha Hora</span>
+				</th>
+				<th>
+					<span>País</span>
+				</th>
+				<th>
+					<span>Ciudad</span>
+				</th>
+				<th>
+					<span>Clima</span>
+				</th>
+				<th>
+					<span>Sensación Térmica</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+            @foreach (var item in listado) {
+
+               <tr>
+                    <td>
+                        @item.FechaHora
+                    </td>
+                    <td>
+                        @item.Ciudad.Pais.Name
+                    </td>
+                    <td>
+                        @item.Ciudad.Name
+                    </td>
+                    <td>
+                        @item.Clima
+                    </td>
+                    <td>
+                        @item.SensacionTermica
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+ 
+
+<style>
+
+	.table-fixed {
+		overflow-y: auto;
+		height: 100px;
+	}
+
+		.table-fixed thead th {
+			position: sticky;
+			top: 0;
+		}
+
+	/* Just common table stuff. Really. */
+	table {
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	th, td {
+		padding: 8px 16px;
+	}
+
+	th {
+		background: #eee;
+        cursor: pointer;
+	}
+
+</style>
+
+<script>
+    function sortTable(table, col, reverse) {
+        var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
+            tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
+            i;
+        reverse = -((+reverse) || -1);
+        tr = tr.sort(function (a, b) { // sort rows
+            return reverse // `-1 *` if want opposite order
+                * (a.cells[col].textContent.trim() // using `.textContent.trim()` for test
+                    .localeCompare(b.cells[col].textContent.trim())
+                   );
+        });
+        for(i = 0; i < tr.length; ++i) tb.appendChild(tr[i]); // append each row in order
+    }
+
+    function makeSortable(table) {
+        var th = table.tHead, i;
+        th && (th = th.rows[0]) && (th = th.cells);
+        if (th) i = th.length;
+        else return; // if no `<thead>` then do nothing
+        while (--i >= 0) (function (i) {
+            var dir = 1;
+            th[i].addEventListener('click', function () {sortTable(table, i, (dir = 1 - dir))});
+        }(i));
+    }
+
+    function makeAllSortable(parent) {
+        parent = parent || document.body;
+        var t = parent.getElementsByTagName('table'), i = t.length;
+        while (--i >= 0) makeSortable(t[i]);
+    }
+
+    window.onload = function () {makeAllSortable();};
+
+</script>

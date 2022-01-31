@@ -1,0 +1,29 @@
+﻿@model InformeClimaPortal.Entities.Ciudad
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalle</h1>
+
+<div>
+    <h4>Ciudad</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ExternalId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ExternalId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>
